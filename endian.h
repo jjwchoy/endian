@@ -89,17 +89,57 @@ struct LittleEndian {
     }
 };
 
+namespace {
+
+uint32_t floatAsInt(float f) {
+    union {
+        float fv;
+        uint32_t uv;
+    } u;
+    u.fv = f;
+    return u.uv;
+}
+
+float intAsFloat(uint32_t v) {
+    union {
+        float fv;
+        uint32_t uv;
+    } u;
+    u.uv = v;
+    return u.fv;
+}
+
+uint64_t doubleAsInt(double d) {
+    union {
+        double dv;
+        uint64_t uv;
+    } u;
+    u.dv = d;
+    return u.uv;
+}
+
+double intAsDouble(uint64_t v) {
+    union {
+        double dv;
+        uint64_t uv;
+    } u;
+    u.uv = v;
+    return u.dv;
+}
+
+}
+
 template <>
 struct BigEndian<float> : private BigEndian<uint32_t> {
     using BigEndian<uint32_t>::numBytes;
     using BigEndian<uint32_t>::numBits;
 
     BigEndian(float val)
-        : BigEndian<uint32_t>(*reinterpret_cast<uint32_t*>(&val)) {}
+        : BigEndian<uint32_t>(floatAsInt(val)) {}
 
     operator float() const {
         uint32_t val = static_cast<uint32_t>(*this);
-        return *(reinterpret_cast<float*>(&val));
+        return intAsFloat(val);
     }
 };
 
@@ -109,11 +149,11 @@ struct BigEndian<double> : private BigEndian<uint64_t> {
     using BigEndian<uint64_t>::numBits;
 
     BigEndian(double val)
-        : BigEndian<uint64_t>(*reinterpret_cast<uint64_t*>(&val)) {}
+        : BigEndian<uint64_t>(doubleAsInt(val)) {}
 
     operator double() const {
         uint64_t val = static_cast<uint64_t>(*this);
-        return *(reinterpret_cast<double*>(&val));
+        return intAsDouble(val);
     }
 };
 
@@ -123,11 +163,11 @@ struct LittleEndian<float> : private LittleEndian<uint32_t> {
     using LittleEndian<uint32_t>::numBits;
 
     LittleEndian(float val)
-        : LittleEndian<uint32_t>(*reinterpret_cast<uint32_t*>(&val)) {}
+        : LittleEndian<uint32_t>(floatAsInt(val)) {}
 
     operator float() const {
         uint32_t val = static_cast<uint32_t>(*this);
-        return *(reinterpret_cast<float*>(&val));
+        return intAsFloat(val);
     }
 };
 
@@ -137,11 +177,11 @@ struct LittleEndian<double> : private LittleEndian<uint64_t> {
     using LittleEndian<uint64_t>::numBits;
 
     LittleEndian(double val)
-        : LittleEndian<uint64_t>(*reinterpret_cast<uint64_t*>(&val)) {}
+        : LittleEndian<uint64_t>(doubleAsInt(val)) {}
 
     operator double() const {
         uint64_t val = static_cast<uint64_t>(*this);
-        return *(reinterpret_cast<double*>(&val));
+        return intAsDouble(val);
     }
 };
 
