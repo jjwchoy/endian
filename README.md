@@ -2,7 +2,7 @@ This project contains template classes to represent big-endian and little-endian
 
 ### Conversion from host-endianness
 
-```
+```C++
 using jj::BigEndian;
 using jj::LittleEndian;
 
@@ -20,7 +20,7 @@ assert(0 == memcmp(expectedLe, &val64Le, sizeof(val64Le)));
 ```
 
 ### Conversion to host-endianness
-```
+```C++
 using jj::BigEndian;
 using jj::LittleEndian;
 
@@ -39,7 +39,7 @@ assert(expectedVal == static_cast<uint64_t>(val64Le));
 ```
 
 ### Big/Little endian conversion
-```
+```C++
 BigEndian<uint64_t> val64Be = ...
 LittleEndian<uint64_t> val64Le = val64Be;
 ```
