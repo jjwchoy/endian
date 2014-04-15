@@ -29,6 +29,9 @@
 namespace jj {
 
 template <typename T>
+struct LittleEndian;
+
+template <typename T>
 struct BigEndian {
     static constexpr int numBytes() {
         return sizeof(T);
@@ -45,6 +48,8 @@ struct BigEndian {
             data[i] = static_cast<uint8_t>(value >> (numBits() - (i + 1) * 8));
         }
     }
+
+    BigEndian(const LittleEndian<T>& le) : BigEndian(static_cast<T>(le)) {}
 
     operator T() const {
         T val = 0;
@@ -72,6 +77,8 @@ struct LittleEndian {
             data[i] = static_cast<uint8_t>(value >> (i * 8));
         }
     }
+
+    LittleEndian(const BigEndian<T>& be) : LittleEndian(static_cast<T>(be)) {}
 
     operator T() const {
         T val = 0;

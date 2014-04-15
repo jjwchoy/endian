@@ -109,4 +109,15 @@ int main() {
     assert(sizeof(double) == sizeof(LittleEndian<double>));
     assert(0 == memcmp(exp64Be, &dvalBe, sizeof(exp64Be)));
     assert(0 == memcmp(exp64Le, &dvalLe, sizeof(exp64Le)));
+
+    // Conversions between le and be
+    BigEndian<uint16_t> be1(val16);
+    LittleEndian<uint16_t> le1(be1);
+
+    assert(static_cast<uint16_t>(be1) == static_cast<uint16_t>(le1));
+
+    BigEndian<uint16_t> be2(val16);
+    LittleEndian<uint16_t> le2 = be2;
+
+    assert(static_cast<uint16_t>(be2) == static_cast<uint16_t>(le2));
 }
